@@ -1,0 +1,844 @@
+#!markdown
+
+<div style="text-align: center;">
+<pre style="display: inline-block; text-align: left;"><code>
+ _____            ______          __    __
+|  __ \          |  ____|        / /    \ \
+| |__) |___  __ _| |__  __  __  | | _ __ | |
+|  _  // _ \/ _` |  __| \ \/ /  | || '_ \| |
+| | \ \  __/ (_| | |____ >  <   | || |_) | |
+|_|  \_\___|\__, |______/_/\_\  | || .__/| |
+             __/ |               \_\ |  /_/
+            |___/                  |_|
+</code></pre>
+</div>
+
+#!markdown
+
+<div style="text-align: center;">
+<img src="./welcome-to-regex-hell.png" alt="Regex Table" style="height: 550px;">
+</div>
+
+#!markdown
+
+---
+
+#!markdown
+
+# Regex language feature comparison
+
+
+<img src="./RegexJS.png" alt="Regex Table" style="width: 100%">
+
+> This image is compiled from [Wikipedia](https://en.wikipedia.org/wiki/Comparison_of_regular_expression_engines#Language_features) 2021
+
+So lets focus on JavaScript RegEx
+
+#!markdown
+
+----
+
+# What will we talk about today?
+
+- **Basic concepts (Part 1)**
+  - `  |  ` Boolean
+  - ` ( ) ` Grouping
+- **Assertions**
+  - `  \N `
+  - `  ^  ` & `  $  `
+  - ` [ ] ` , ` [^ ]` & `[ - ]`
+- **Quantifiers**
+  - `  ?  ` & `  *  `
+  - `  +  `
+  - ` x{n}` , `x{n,}` , `x{,m}` & `{n,m}`
+- Character classes (Part 2)
+  - `  .  `
+  - `  \w ` & `  \W `
+  - `  \d ` & `  \D `
+  - `  \s ` & `  \S `
+  - `  \t ` , `  \r ` , `  \n ` , `  \v ` , `  \f ` , `  \0 `
+  - `\xHH` , `\uHHHH` , `\u{HHHH}` or `\u{HHHHH}`
+- RegExp flags
+  - g = **g***lobal*
+  - i = *case* **i***nsensitive*
+  - m = **m***ultiline*
+  - s = **s***ingle line*
+  - u = **u***nicode*  `\p{X}` & `\P{X}`
+  - y = *stick***y**
+  - d = generate indices for substring matches
+- **The hard part of RegExp**
+  - ` [ ] ` or ` ( ) `
+  - Utilizing groups in code
+  
+```JavaScript
+const raw = /pattern/flags
+const cls = new RegExp('pattern', 'flags');
+const cls = new RegExp(/pattern/, 'flags');
+```
+----
+
+#!markdown
+
+# Basic Consepts
+
+## Boolean
+
+#!javascript
+
+const regex = /gray|grey/
+
+const mkay = regex.test('mkay') // false
+const gray = regex.test('gray')
+const grey = regex.test('grey')
+
+console.log(`mkay: ${mkay} \ngray: ${gray} \ngrey: ${grey}`)
+
+#!markdown
+
+## Grouping
+
+#!javascript
+
+const regex = /gr(a|e)y/
+
+const mkay = regex.test('mkay')
+const gray = regex.test('gray')
+const grey = regex.test('grey')
+
+console.log(`mkay: ${mkay} \ngray: ${gray} \ngrey: ${grey}`)
+
+#!markdown
+
+---
+
+#!markdown
+
+# Assertions
+An Assertion in Regular Expression is **when a match is possible in some way**
+
+### \N
+
+#!javascript
+
+const regexA = /\040/
+const regexB = / /
+
+const testA = regexA.test('Hello there')
+const testB = regexB.test('Hello there')
+
+console.log(`testA: ${testA}\ntestB: ${testB}`)
+
+#!markdown
+
+### ^ & $
+
+#!javascript
+
+const start = /^start/
+const end = /end$/
+
+const startA = start.test('start end')
+const startB = start.test(' start end ')
+
+const endA = end.test('start end\n end')
+const endB = end.test(' start end ')
+
+console.log(`startA: ${startA}  startB: ${startB}\n- endA: ${endA}  - endB: ${endB}`)
+
+#!markdown
+
+---
+
+#!markdown
+
+### [ ] Character set
+
+#!javascript
+
+const regex = /[eaiou]/g
+
+const response = 'you shal not pass!'.match(regex)
+
+console.log(response)
+
+#!markdown
+
+### [^ ] Negated set
+
+#!javascript
+
+const regex = /[^eaiou]/g
+
+const response = 'you shal not pass!'.match(regex)
+
+console.log(response)
+
+#!markdown
+
+### [A-Z] Range
+
+#!javascript
+
+const regex = /[A-Za-z]/g
+
+const response = 'abcdef]gHIJKLMN'.match(regex)
+
+console.log(response)
+
+#!markdown
+
+---
+
+#!markdown
+
+# Quantifiers
+A quantifier after an element (such as a token, character, or group) specifies how many times the preceding element is allowed to repeat.  
+The most common quantifiers are the question mark ?, the asterisk * (derived from the Kleene star), and the plus sign + (Kleene plus).
+
+### ?
+
+#!javascript
+
+const regex = /^colou?r$/
+
+const colouur = regex.test('colouur')
+const colour = regex.test('colour')
+const color = regex.test('color')
+
+console.log(`colouur: ${colouur} \ncolour: ${colour} \ncolor: ${color}`)
+
+#!markdown
+
+### *
+
+#!javascript
+
+const regex = /^colou*r$/
+
+const colouur = regex.test('colouur')
+const colour = regex.test('colour')
+const color = regex.test('color')
+
+console.log(`colouur: ${colouur} \ncolour: ${colour} \ncolor: ${color}`)
+
+#!markdown
+
+---
+
+#!markdown
+
+### +
+
+#!javascript
+
+const regex = /^colou+r$/
+
+const colouur = regex.test('colouur')
+const colour = regex.test('colour')
+const color = regex.test('color')
+
+console.log(`colouur: ${colouur} \ncolour: ${colour} \ncolor: ${color}`)
+
+#!markdown
+
+### X{n} 
+
+#!javascript
+
+const regexA = /^colou{1}r$/
+const regexB = /^colou{2}r$/
+
+const colouurA = regexA.test('colouur')
+const colourA = regexA.test('colour')
+const colorA = regexA.test('color')
+
+const colouurB = regexB.test('colouur')
+const colourB = regexB.test('colour')
+const colorB = regexB.test('color')
+
+console.log(`- colouurA: ${colouurA} - colourA: ${colourA}  - colorA: ${colorA}\n- colouurB: ${colouurB}  - colourB: ${colourB} - colorB: ${colorB}`)
+
+#!markdown
+
+---
+
+#!markdown
+
+### X{n,} minimum that X needs to be found  
+`n` needs to be positive  
+`+` is the same as `X{1,}`
+
+#!javascript
+
+const regex = /^colou{2,}r$/
+
+const colouuur = regex.test('colouuur')
+const colouur = regex.test('colouur')
+const colour = regex.test('colour')
+
+console.log(`colouuur: ${colouuur} - colouur: ${colouur} - colour: ${colour}`)
+
+#!markdown
+
+### X{n,m} minimum and maximum
+`m` always needs to be bigger then what is before the `,`  
+`?` is the same as `X{0,1}`  
+> Some browsers accept `X{,1}` to be the same as `X{0,1}`
+
+#!javascript
+
+const regex = /^colou{2,3}r$/
+
+const colouuuur = regex.test('colouuuur')
+const colouuur = regex.test('colouuur')
+const colouur = regex.test('colouur')
+const colour = regex.test('colour')
+
+console.log(`colouuuur: ${colouuuur} - colouur: ${colouur} \ncolouuur: ${colouuur}   - colour: ${colour}`)
+
+#!markdown
+
+---
+
+#!markdown
+
+<div style="text-align: center;">
+<pre style="display: inline-block; text-align: left;"><code>
+  ______           _            __     _____           _       __ 
+ |  ____|         | |          / _|   |  __ \         | |     /_ |
+ | |__   _ __   __| |     ___ | |_    | |__) |_ _ _ __| |_     | |
+ |  __| | '_ \ / _` |    / _ \|  _|   |  ___/ _` | '__| __|    | |
+ | |____| | | | (_| |   | (_) | |     | |  | (_| | |  | |_     | |
+ |______|_| |_|\__,_|    \___/|_|     |_|   \__,_|_|   \__|    |_|
+                                                                  
+                                                                  
+</code></pre>
+</div>
+
+#!markdown
+
+<div style="text-align: center;">
+<img src="./yer-a-regex-wizard.jpg" alt="Regex Table" style="height: 550px;">
+</div>
+
+---
+
+#!markdown
+
+<div style="text-align: center;">
+<pre style="display: inline-block; text-align: left;"><code>
+ _____            ______         __    __      _____           _       ___  
+|  __ \          |  ____|       / /    \ \    |  __ \         | |     |__ \ 
+| |__) |___  __ _| |__  __  __ | | _ __ | |   | |__) |_ _ _ __| |_       ) |
+|  _  // _ \/ _` |  __| \ \/ / | || '_ \| |   |  ___/ _` | '__| __|     / / 
+| | \ \  __/ (_| | |____ >  <  | || |_) | |   | |  | (_| | |  | |_     / /_ 
+|_|  \_\___|\__, |______/_/\_\ | || .__/| |   |_|   \__,_|_|   \__|   |____|
+             __/ |              \_\ |  /_/                                  
+            |___/                 |_|                                       
+</code></pre>
+</div>
+
+#!markdown
+
+<div style="text-align: center;">
+<img src="./how-to-catex.webp" alt="Regex Table" style="height: 525px;">
+</div>
+
+#!markdown
+
+----
+
+# What will we talk about today?
+
+- Basic concepts (Part 1)
+  - `  |  ` Boolean
+  - ` ( ) ` Grouping
+- Assertions
+  - `  \N `
+  - `  ^  ` & `  $  `
+  - ` [ ] ` , ` [^ ]` & `[ - ]`
+- Quantifiers
+  - `  ?  ` & `  *  `
+  - `  +  `
+  - ` x{n}` , `x{n,}` , `x{,m}` & `{n,m}`
+- **Character classes (Part 2)**
+  - `  .  `
+  - `  \w ` & `  \W `
+  - `  \d ` & `  \D `
+  - `  \s ` & `  \S `
+  - `  \t ` , `  \r ` , `  \n ` , `  \v ` , `  \f ` , `  \0 `
+  - `\xHH` , `\uHHHH` , `\u{HHHH}` or `\u{HHHHH}`
+- **RegExp flags**
+  - g = **g***lobal*
+  - i = *case* **i***nsensitive*
+  - m = **m***ultiline*
+  - s = **s***ingle line*
+  - u = **u***nicode*  `\p{X}` & `\P{X}`
+  - y = *stick***y**
+  - d = generate indices for substring matches
+- **The hard part of RegExp**
+  - ` [ ] ` or ` ( ) `
+  - Utilizing groups in code
+  
+```JavaScript
+const raw = /pattern/flags
+const cls = new RegExp('pattern', 'flags');
+const cls = new RegExp(/pattern/, 'flags');
+```
+----
+
+#!markdown
+
+# Character classes
+**Character classes** are one of the most commonly used features of **regular expressions**.  
+A character class allows you to match any symbol from a certain character set. A character class is also called a character set
+
+### .
+
+#!javascript
+
+const regex = /.+/
+
+const mkay = regex.test('mkay')
+const gray = regex.test('gray')
+const grey = regex.test('grey')
+
+console.log(`mkay: ${mkay} \ngray: ${gray} \ngrey: ${grey}`)
+
+#!javascript
+
+// Also named a greedy quantifier
+const regexGreedy = /'.*'/g
+
+const responseGreedy = `You 'shall' not 'pass!'`.match(regexGreedy)
+
+// Also named a lazy quantifier
+const regexLazy = /'.*?'/g
+
+const responseLazy = `You 'shall' not 'pass!'`.match(regexLazy)
+
+console.log(`Greedy: [${responseGreedy}] \nLazy: [${responseLazy}]`)
+
+#!markdown
+
+----
+
+### \w & \W
+
+#!javascript
+
+const regexA = /\w+/g
+const regexB = /[a-zA-Z0-9_]+/g
+
+const responseA = 'You shall not pass!'.match(regexA)
+const responseB = 'You shall not pass!'.match(regexB)
+
+console.log('Response A: ', responseA)
+console.log('Response B: ', responseB)
+
+#!javascript
+
+const regexA = /\W+/g
+const regexB = /[^a-zA-Z0-9_]/g
+
+const responseA = 'You shall not pass!'.match(regexA)
+const responseB = 'You shall not pass!'.match(regexB)
+
+console.log('Response A: ', responseA)
+console.log('Response B: ', responseB)
+
+#!markdown
+
+----
+
+### \d & \D
+
+#!javascript
+
+const regexA = /\d/g
+const regexB = /[0-9]/g
+
+
+const responseA = 'I can only count to 4. 1, 2, 5, 4. Me count so poor'.match(regexA)
+const responseB = 'I can only count to 4. 1, 2, 5, 4. Me count so poor'.match(regexB)
+
+console.log('Response A: ', responseA)
+console.log('Response B: ', responseB)
+
+#!javascript
+
+const regexA = /\D/g
+const regexB = /[^0-9]/g
+
+
+const responseA = 'I can only count to 4. 1, 2, 5, 4. Me count so poor'.match(regexA)
+const responseB = 'I can only count to 4. 1, 2, 5, 4. Me count so poor'.match(regexB)
+
+console.log('Response A: ', responseA)
+console.log('Response B: ', responseB)
+
+#!markdown
+
+----
+
+### \s & \S
+
+#!javascript
+
+const regexA = /\s/g
+const regexB = /[ \t\n]/g
+
+const responseA = 'You shall not pass!'.match(regexA)
+const responseB = 'You shall not pass!'.match(regexB)
+
+console.log('Response A: ', responseA)
+console.log('Response B: ', responseB)
+
+#!javascript
+
+const regexA = /\S/g
+const regexB = /[^ \t\n]/g
+
+const responseA = 'You shall not pass!'.match(regexA)
+const responseB = 'You shall not pass!'.match(regexB)
+
+console.log('Response A: ', responseA)
+console.log('Response B: ', responseB)
+
+#!markdown
+
+----
+
+### \t, \r, \n
+
+#!javascript
+
+const regexA = /\t/
+const regexB = /	/ // tab token
+
+const responseA = '		Tabs vs spaces'.match(regexA)
+const responseB = '		Tabs vs spaces'.match(regexB)
+
+console.log(responseA)
+console.log(responseB) // note the rendered \t
+
+#!javascript
+
+const regexA = /\r\n/ // known as CRLF used in Windows (can be set by your code editor)
+const regexB = /\n/ // known as LF is used in Unix, Unix only uses LF as line breaks.
+const regexC = /\r/ // known as CR used in the old MacOS (pre-OSX MacIntosh)
+
+const textA = '\r\n'
+const textB = '\n'
+const textC = '\r'
+
+const resultA = [regexA.test(textA), regexA.test(textB), regexA.test(textC)]
+const resultB = [regexB.test(textA), regexB.test(textB), regexB.test(textC)]
+const resultC = [regexC.test(textA), regexC.test(textB), regexC.test(textC)]
+
+console.log(['\r\n', '\n', '\r'])
+console.log(resultA)
+console.log(resultB)
+console.log(resultC)
+
+#!markdown
+
+----
+
+### \0, \f, \v
+
+#!javascript
+
+// Machtes a null caracter
+/\0/
+
+// A hidden white space
+/\f/ // the readable version
+// // my editor makes it look like this
+
+
+/\v/ // matches unicode vertical whitespace, considered a character class by the PCRE engine
+/[\n\r\f\u000B\u0085\u2028\u2029]/ // or its represented like this
+
+/\u000B/
+// // the vertical tab
+
+/\u0085/ 
+// // the line separator
+
+// The following info will VS Code show 
+// The character U+2028 " " and U+2029 " " could be confused with the character U+0020, which is more common in source code. Adjust settings
+/\u2028/ 
+/ / 
+/\u2029/
+/ / 
+
+#!markdown
+
+[Stack**overflow**](https://stackoverflow.com/a/9168133/7185314)
+> it's a feature of the JavaScript language, documented in the ECMAScript standard (3rd edition section 7.3),  
+> that the U+2028 and U+2029 characters count as line endings.  
+> Consequently a JavaScript parser will treat any unencoded U+2028/9 character in the same way as a newline.  
+> Since you can't put a newline inside a string literal, you get a syntax error.  
+>  
+> This is an unfortunate oversight in the design of JSON: it is not actually a proper subset of JavaScript.  
+> Raw U+2028/9 characters are valid in string literals in JSON,  
+> and will be accepted by JSON.parse, but not so in JavaScript itself.  
+>  
+> Hence it is only safe to generate JavaScript code using a JSON parser if you're sure it explicitly \u-escapes those characters.  
+> Some do, some don't; many \u-escape all non-ASCII characters, which avoids the problem.
+
+---
+
+#!markdown
+
+### \xHH , \uHHHH , \u{HHHH} or \u{HHHHH}
+As shown in the **\0, \f, \v** part above we have seen some use of the \uHHHH
+
+***WARNING*** The use of \u{HHHH} or \u{HHHHH} might not be supported in all browsers / js engines
+
+#!javascript
+
+const regexA = /\u000B/ // \uHHHH matches 4 hexadecimal digits this one is used on previouse page as well
+const regexB = /\x0B/ // \xHH matches 2 hexadecimal digits
+const regexC = /\u{000B}/u // \u{HHHH} matches 4 hexadecimal digits when unicode flag is used
+const regexD = /\u{0000B}/u // \u{HHHHH} matches Surrogates and Supplementary characters in the hexadecimal 
+
+const text = ''
+
+resultA = regexA.test(text)
+resultB = regexB.test(text)
+resultC = regexC.test(text)
+resultD = regexD.test(text)
+
+console.log(`\\u000B: ${resultA} \n\\x0B: ${resultB} \n\\u{000B}: ${resultC} \n\\u{0000B}: ${resultD}`)
+
+#!markdown
+
+Oracle:
+> To support supplementary characters without changing the char primitive data type and causing incompatibility with previous Java programs, supplementary characters are defined by a pair of code point values that are called surrogates. The first code point is from the high surrogates range of U+D800 to U+DBFF, and the second code point is from the low surrogates range of U+DC00 to U+DFFF. For example, the Deseret character LONG I, U+10400, is defined with this pair of surrogate values: U+D801 and U+DC00.
+
+Windows:
+> Windows applications normally use UTF-16 to represent Unicode character data. The use of 16 bits allows direct representation of 65,536 unique characters, but this Basic Multilingual Plane (BMP) is not nearly enough to cover all the symbols used in human languages. Unicode version 4.1 includes over 97,000 characters, with over 70,000 characters for Chinese alone.
+>
+> The Unicode standard has established 16 additional "planes" of characters, each the same size as the BMP. Naturally, most code points beyond the BMP do not yet have characters assigned to them, but definition of the planes gives Unicode the potential to define 1,114,112 characters (that is, 216 * 17 characters) within the code point range U+0000 to U+10FFFF. For UTF-16 to represent this larger set of characters, the Unicode Standard defines "supplementary characters".
+
+#!markdown
+
+----
+
+# Flags
+
+Regular expressions have optional flags that allow for functionality like global searching and case-insensitive searching.  
+These flags can be used separately or together in any order,  
+and are included as part of the regular expression. 
+
+#!javascript
+
+const raw = /pattern/flags
+const cls = new RegExp('pattern', 'flags');
+const cls = new RegExp(/pattern/, 'flags');
+
+#!markdown
+
+## Flags we have seen here
+
+- Global
+- Unicode
+
+What do we remember of them?
+
+<div style="text-align: center;">
+<img src="./regex-math.png" alt="Regex Table" style="height: 300px;">
+</div>
+
+----
+
+#### /g - Continues to find more matches after the first one
+
+#!javascript
+
+const regex1 = new RegExp('foo', 'g');
+const regex2 = new RegExp('bar', '');
+
+// expected output: regex1: true regex2: false
+console.log(`Example1: regex1: ${regex1.global} regex2: ${regex2.global}`);
+
+const regexp1 = /t(e)(st(\d?))/g; // \d matches numbers
+const regexp2 = /t(e)(st(\d?))/;
+const str = 'test1test2';
+
+const arrayAll = [...str.matchAll(regexp1)];
+const arrayMatchA = str.match(regexp1)
+const arrayMatchB = str.match(regexp2)
+
+console.log('Example2')
+console.log(arrayAll[0]);
+// expected output: arrayAll ["test1", "e", "st1", "1"]
+
+console.log(arrayAll[1]);
+// expected output: arrayAll ["test2", "e", "st2", "2"]
+
+console.log(arrayMatchA);
+// expected output: arrayMatchA ["test1", "test1"]
+
+console.log(arrayMatchB);
+// expected output: arrayMatchB ["test1", "e", "st1", "1"]
+
+#!markdown
+
+----
+
+#### /u - Having the power of unicode's!
+
+#!javascript
+
+const regex1 = /\p{Emoji_Presentation}/g
+const regex2 = /\p{Emoji_Presentation}/gu
+const regex3 = /\p{Script_Extensions=Armenian}+/gu
+const regex4 = /\P{Script_Extensions=Armenian}+/gu
+const regex5 = /\u{000B}/u // \u{HHHH} matches 4 hexadecimal digits when unicode flag is used
+const regex6 = /\u{0000B}/u // \u{HHHHH} matches Surrogates and Supplementary characters in the hexadecimal 
+
+const str = 'զվարճանք is the word "fun" in Armenian 👌 '
+
+console.log(str.match(regex1))
+console.log(str.match(regex2))
+console.log(str.match(regex3))
+console.log(str.match(regex4))
+console.log(str.match(regex5))
+console.log(str.match(regex6))
+
+#!markdown
+
+##### Other handy modifiers from \p
+
+`/\p{Lu}/` Matches an uppercase letter that has an lowercase variant  
+`/\p{Ll}/` Matches a lowercase letter that has an uppercase variant  
+You do not need to use the /u flag on those modifiers.  
+
+----
+
+#### /i /m /s
+
+#!javascript
+
+const regexI1 = /NOTE/i // case Insensitve flag
+const regexI2 = /NOTE/
+
+const test1 = regexI1.test('note')
+const test2 = regexI2.test('note')
+
+console.log(`Case insensitve: ${test1}  expected: true \nCase sensitve:   ${test2} expected: false`)
+
+#!javascript
+
+const regexM1 = /^foo/m // Multiline flag
+const regexM2 = /^foo/
+
+const test1 = regexM1.test('\nfoo') // Regex sees everly line as start of matching
+const test2 = regexM2.test('\nfoo') // Regex sees \n as start of matching
+
+console.log(`Multiline on:  ${test1}  expected: true \nMultiline off: ${test2} expected: false`)
+
+#!javascript
+
+const regexS1 = /bar.example/s // Single line flag
+const regexS2 = /bar.example/
+
+const str = 'bar\nexample foo example' // multi line string
+
+console.log(`Test on new line: ${regexS1.test(str)}  | expected: true \nTest on new line: ${regexS2.test(str)} | expected: false`)
+
+#!markdown
+
+----
+
+#### /y
+Perform a "stick**y**" search that matches starting at the current position in the target string
+
+#!javascript
+
+const regex = /^foo/my
+
+regex.lastIndex = 2;
+const res1 = regex.test('..foo')
+
+regex.lastIndex = 2;
+const res2 = regex.test('.\nfoo')
+
+console.log(` "..foo": ${res1} \n ".\\nfoo": ${res2} `)
+
+#!markdown
+
+#### /d
+
+in**d**ices. The JavaScript regex engine now returns the indices at which the regex matched in the subject string.
+
+#!javascript
+
+const regexD1 = /foo/gd // Gives string position of your matches
+const regexD2 = /foo/g
+
+const str = 'foo bar foo'
+console.log(regexD1.exec(str).indices[0])
+console.log(regexD1.exec(str).indices[0])
+console.log(regexD2.exec(str).indices)
+
+#!markdown
+
+----
+
+## The hard part of RegExp
+
+#### ( ) and [ ]
+
+#!javascript
+
+const regexA = /gr(a|e)y/
+const regexB = /gr[ae]y/
+
+const mkayA = regexA.test('mkay')
+const grayA = regexA.test('gray')
+const greyA = regexA.test('grey')
+
+const mkayB = regexB.test('mkay')
+const grayB = regexB.test('gray')
+const greyB = regexB.test('grey')
+
+console.log(`mkayA: ${mkayA} | mkayB: ${mkayB} \ngrayA: ${grayA}  | grayB: ${grayB} \ngreyA: ${greyA}  | greyB: ${greyB}`)
+
+#!markdown
+
+#### Utilizing groups in code
+
+#!javascript
+
+const imageDescription = 'This image has a resolution of 1440x900 pixels.';
+const regexpSize = /(([0-9]+)x([0-9]+))/;
+const [mainRes, width, height] = imageDescription.match(regexpSize);
+console.log(`Width: ${match[1]} / Height: ${match[2]}. Width or Height ${match[3]}`);
+// expected output: "Width: 1440 / Height: 900."
+
+#!markdown
+
+----
+
+<div style="text-align: center;">
+<pre style="display: inline-block; text-align: left;"><code>
+  ______           _            __     _____                         __    __  
+ |  ____|         | |          / _|   |  __ \                       / /    \ \ 
+ | |__   _ __   __| |     ___ | |_    | |__) |___  __ _  _____  __ | | _ __ | |
+ |  __| | '_ \ / _` |    / _ \|  _|   |  _  // _ \/ _` |/ _ \ \/ / | || '_ \| |
+ | |____| | | | (_| |   | (_) | |     | | \ \  __/ (_| |  __/>  <  | || |_) | |
+ |______|_| |_|\__,_|    \___/|_|     |_|  \_\___|\__, |\___/_/\_\ | || .__/| |
+                                                   __/ |            \_\ |  /_/ 
+                                                  |___/               |_|      
+</code></pre>
+</div>
+
+<div style="text-align: center;">
+<img src="./I-know-regex.png" alt="Regex Table" style="height: 600px;">
+</div>
+
+----
