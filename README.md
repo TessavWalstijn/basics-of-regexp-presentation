@@ -27,3 +27,21 @@ If you are a creator of one of them and want your image to be removed contact me
 If you are a creator and want recognition of a image contact me via Twitter and I will add it.
 
 My Twitter [@TessavWalstijn](https://twitter.com/TessavWalstijn)
+
+## Other RegExp resources
+
+ - [JavaScript | MDN - Regular expression syntax cheetsheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Cheatsheet)
+ - [Regex101: build, test, and debug regex](https://regex101.com/)  
+    Show explanations what specific elements in your RegEx do.
+    Different engines available to test
+     - PHP
+     - ECMAScript
+     - Python
+     - Golang
+     - Java 8
+     - .NET (C#)
+ - [RegExr: Learn, Build, & Test RegEx](https://regexr.com/)  
+    Shows the breakdown of your RegEx below on how it is split up.
+    Has a library to search specific regex elements.
+    Only tests on ECMAScript engine
+    Has a small cheetsheet 
