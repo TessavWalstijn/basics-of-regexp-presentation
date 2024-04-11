@@ -25,7 +25,7 @@
 #!markdown
 
 <div style="text-align: center;">
-<img src="./welcome-to-regex-hell.png" alt="Regex Table" style="height: 550px;">
+<img src="./welcome-to-regex-hell.png" alt="Welcome to regex hell Meme" style="height: 550px;">
 </div>
 
 #!markdown
@@ -50,22 +50,23 @@ So lets focus on JavaScript RegEx
 # What will we talk about today?
 
 - **Basic concepts (Part 1)**
-  - `  |  ` Boolean
-  - ` ( ) ` Grouping
+  - `|` OR statement
+  - `( )` Grouping
 - **Assertions**
-  - `  \N `
-  - `  ^  ` & `  $  `
-  - ` [ ] ` , ` [^ ]` & `[ - ]`
+  - `\N`
+  - `^` & `$`
+  - `[abc]` , `[^xyz]` & `[a-z]`
 - **Quantifiers**
-  - `  ?  ` & `  *  `
-  - `  +  `
-  - ` x{n}` , `x{n,}` , `x{,m}` & `{n,m}`
+  - `?` & `*`
+  - `+`
+  - `x{n}`, `x{n,}` , `x{,m}`  & `x{n,m}`
+  - `x*?`, `x{n,m}?`
 - Character classes (Part 2)
-  - `  .  `
-  - `  \w ` & `  \W `
-  - `  \d ` & `  \D `
-  - `  \s ` & `  \S `
-  - `  \t ` , `  \r ` , `  \n ` , `  \v ` , `  \f ` , `  \0 `
+  - `.`
+  - `\w` & `\W`
+  - `\d` & `\D`
+  - `\s` & `\S`
+  - `\t` , `\r` , `\n` , `\v` , `\f` , `\0`
   - `\xHH` , `\uHHHH` , `\u{HHHH}` or `\u{HHHHH}`
 - RegExp flags
   - g = **g***lobal*
@@ -75,8 +76,8 @@ So lets focus on JavaScript RegEx
   - u = **u***nicode*  `\p{X}` & `\P{X}`
   - y = *stick***y**
   - d = generate indices for substring matches
-- **The hard part of RegExp**
-  - ` [ ] ` or ` ( ) `
+- The hard part of RegExp
+  - `[ ]` or `( )`
   - Utilizing groups in code
   
 ```JavaScript
@@ -93,7 +94,7 @@ const cls = new RegExp(/pattern/, 'flags');
 
 # Basic Consepts
 
-## Boolean
+## OR statement
 
 #!javascript
 
@@ -166,31 +167,31 @@ console.log(`startA: ${startA}  startB: ${startB}\n- endA: ${endA}  - endB: ${en
 
 #!markdown
 
-### [ ] Character set
+### [abc] Character set
 
 #!javascript
 
 const regex = /[eaiou]/g
 
-const response = 'you shal not pass!'.match(regex)
+const response = 'You shall not pass!'.match(regex)
 
 console.log(response)
 
 #!markdown
 
-### [^ ] Negated set
+### [^xyz] Negated set
 
 #!javascript
 
 const regex = /[^eaiou]/g
 
-const response = 'you shal not pass!'.match(regex)
+const response = 'You shall not pass!'.match(regex)
 
 console.log(response)
 
 #!markdown
 
-### [A-Z] Range
+### [a-z] Range
 
 #!javascript
 
@@ -212,7 +213,7 @@ console.log(response)
 A quantifier after an element (such as a token, character, or group) specifies how many times the preceding element is allowed to repeat.  
 The most common quantifiers are the question mark ?, the asterisk * (derived from the Kleene star), and the plus sign + (Kleene plus).
 
-### ?
+### ? - 0 or 1
 
 #!javascript
 
@@ -226,7 +227,7 @@ console.log(`colouur: ${colouur} \ncolour: ${colour} \ncolor: ${color}`)
 
 #!markdown
 
-### *
+### * - 0 or more
 
 #!javascript
 
@@ -244,7 +245,7 @@ console.log(`colouur: ${colouur} \ncolour: ${colour} \ncolor: ${color}`)
 
 #!markdown
 
-### +
+### + - 1 or more
 
 #!javascript
 
@@ -258,7 +259,7 @@ console.log(`colouur: ${colouur} \ncolour: ${colour} \ncolor: ${color}`)
 
 #!markdown
 
-### X{n} 
+### X{n} - N amount
 
 #!javascript
 
@@ -286,7 +287,9 @@ console.log(`- colouurA: ${colouurA} - colourA: ${colourA}  - colorA: ${colorA}\
 
 ### X{n,} minimum that X needs to be found  
 `n` needs to be positive  
-`+` is the same as `X{1,}`
+`+` is the same as `X{1,}`  
+`*` is the same as `X{0,}`  
+`?` is the same as `X{0,1}`
 
 #!javascript
 
@@ -320,6 +323,37 @@ console.log(`colouuuur: ${colouuuur} - colouur: ${colouur} \ncolouuur: ${colouuu
 
 ---
 
+### X+? and X{n,m}? - Lazy quantifiers
+
+So all the quantifiers that we just went over can be made lazy with an additional ?  
+By default are the expressions greedy.
+
+Yes `x??` is possible.  
+No I have not found a use case for `x??`
+
+#!javascript
+
+// Also named a greedy quantifier
+const regexGreedy = /"(.*)"/g
+const quotes = `Is it "You shall not pass!" or is it "You cannot pass!"`
+
+const responseGreedy = quotes.match(regexGreedy)
+
+// Also named a lazy quantifier due to the ?
+const regexLazy = /"(.*?)"/g
+
+const responseLazy = quotes.match(regexLazy)
+
+console.log(`Greedy: [${responseGreedy}] \nLazy: [${responseLazy}]`)
+
+#!markdown
+
+<div style="text-align: center;">
+<img src="./toy-story-greed.jpeg" alt="Toy story greed Meme" style="height: 350px;">
+</div>
+
+---
+
 #!markdown
 
 <br>
@@ -343,7 +377,7 @@ console.log(`colouuuur: ${colouuuur} - colouur: ${colouur} \ncolouuur: ${colouuu
 #!markdown
 
 <div style="text-align: center;">
-<img src="./yer-a-regex-wizard.jpg" alt="Regex Table" style="height: 550px;">
+<img src="./yer-a-regex-wizard.jpg" alt="Yer a regex wizard Meme" style="height: 550px;">
 </div>
 
 <br>
@@ -373,7 +407,7 @@ console.log(`colouuuur: ${colouuuur} - colouur: ${colouur} \ncolouuur: ${colouuu
 #!markdown
 
 <div style="text-align: center;">
-<img src="./how-to-catex.webp" alt="Regex Table" style="height: 525px;">
+<img src="./how-to-catex.webp" alt="How to Catex Meme" style="height: 525px;">
 </div>
 
 #!markdown
@@ -382,23 +416,25 @@ console.log(`colouuuur: ${colouuuur} - colouur: ${colouur} \ncolouuur: ${colouuu
 
 # What will we talk about today?
 
+
 - Basic concepts (Part 1)
-  - `  |  ` Boolean
-  - ` ( ) ` Grouping
+  - `|` OR statement
+  - `( )` Grouping
 - Assertions
-  - `  \N `
-  - `  ^  ` & `  $  `
-  - ` [ ] ` , ` [^ ]` & `[ - ]`
+  - `\N`
+  - `^` & `$`
+  - `[abc]` , `[^xyz]` & `[a-z]`
 - Quantifiers
-  - `  ?  ` & `  *  `
-  - `  +  `
-  - ` x{n}` , `x{n,}` , `x{,m}` & `{n,m}`
+  - `?` & `*`
+  - `+`
+  - `x{n}`, `x{n,}` , `x{,m}`  & `x{n,m}`
+  - `x*?`, `x{n,m}?`
 - **Character classes (Part 2)**
-  - `  .  `
-  - `  \w ` & `  \W `
-  - `  \d ` & `  \D `
-  - `  \s ` & `  \S `
-  - `  \t ` , `  \r ` , `  \n ` , `  \v ` , `  \f ` , `  \0 `
+  - `.` 
+  - `\w` & `\W`
+  - `\d` & `\D`
+  - `\s` & `\S`
+  - `\t` , `\r` , `\n` , `\v` , `\f` , `\0`
   - `\xHH` , `\uHHHH` , `\u{HHHH}` or `\u{HHHHH}`
 - **RegExp flags**
   - g = **g***lobal*
@@ -425,7 +461,7 @@ const cls = new RegExp(/pattern/, 'flags');
 **Character classes** are one of the most commonly used features of **regular expressions**.  
 A character class allows you to match any symbol from a certain character set. A character class is also called a character set
 
-### .
+### . - Yes that is a character class
 
 #!javascript
 
@@ -437,19 +473,11 @@ const grey = regex.test('grey')
 
 console.log(`mkay: ${mkay} \ngray: ${gray} \ngrey: ${grey}`)
 
-#!javascript
+#!markdown
 
-// Also named a greedy quantifier
-const regexGreedy = /'.*'/g
-
-const responseGreedy = `You 'shall' not 'pass!'`.match(regexGreedy)
-
-// Also named a lazy quantifier
-const regexLazy = /'.*?'/g
-
-const responseLazy = `You 'shall' not 'pass!'`.match(regexLazy)
-
-console.log(`Greedy: [${responseGreedy}] \nLazy: [${responseLazy}]`)
+<div style="text-align: center;">
+<img src="./first-the-dot.jpg" alt="First the dot Meme" Meme" style="height: 425px;">
+</div>
 
 #!markdown
 
@@ -590,28 +618,28 @@ console.log(resultC)
 #!javascript
 
 // Machtes a null caracter
-/\0/
+const nullRegex = /\0/
 
 // A hidden white space
-/\f/ // the readable version
-// // my editor makes it look like this
+const whiteSpaceR = /\f/ // the readable version
+const whiteSpaceH = // // my editor makes it look like this
 
 
-/\v/ // matches unicode vertical whitespace, considered a character class by the PCRE engine
-/[\n\r\f\u000B\u0085\u2028\u2029]/ // or its represented like this
+const vSimple = /\v/ // matches unicode vertical whitespace, considered a character class by the PCRE engine
+const vFull = /[\n\r\f\u000B\u0085\u2028\u2029]/ // or its represented like this
 
-/\u000B/
-// // the vertical tab
+const verticalTabR = /\u000B/
+const verticalTabH = // // the vertical tab
 
-/\u0085/ 
-// // the line separator
+const lineSeparatorR = /\u0085/ 
+const lineSeparatorH = // // the line separator
 
 // The following info will VS Code show 
 // The character U+2028 " " and U+2029 " " could be confused with the character U+0020, which is more common in source code. Adjust settings
-/\u2028/ 
-/ / 
-/\u2029/
-/ / 
+const weirdSpace0R = /\u2028/ 
+const weirdSpace0H = / / 
+const weirdSpace1R = /\u2029/
+const weirdSpace1H = / / 
 
 #!markdown
 
@@ -689,7 +717,7 @@ const cls = new RegExp(/pattern/, 'flags');
 What do we remember of them?
 
 <div style="text-align: center;">
-<img src="./regex-math.png" alt="Regex Table" style="height: 300px;">
+<img src="./regex-math.png" alt="Regex math Meme" style="height: 300px;">
 </div>
 
 <br>
@@ -858,9 +886,9 @@ console.log(`mkayA: ${mkayA} | mkayB: ${mkayB} \ngrayA: ${grayA}  | grayB: ${gra
 #!javascript
 
 const imageDescription = 'This image has a resolution of 1440x900 pixels.';
-const regexpSize = /(([0-9]+)x([0-9]+))/;
-const [mainRes, width, height] = imageDescription.match(regexpSize);
-console.log(`Width: ${match[1]} / Height: ${match[2]}. Width or Height ${match[3]}`);
+const regexpSize = /(([0-9]+)x([0-9]+)) pixels/;
+const [fullMatch, resMatch, width, height] = imageDescription.match(regexpSize);
+console.log(`Width: ${width} / Height: ${height}. Resolution ${resMatch}. Full match ${fullMatch}`);
 // expected output: "Width: 1440 / Height: 900."
 
 #!markdown
@@ -885,7 +913,7 @@ console.log(`Width: ${match[1]} / Height: ${match[2]}. Width or Height ${match[3
 <br>
 
 <div style="text-align: center;">
-<img src="./I-know-regex.png" alt="Regex Table" style="height: 600px;">
+<img src="./I-know-regex.png" alt="I know regex Meme" style="height: 600px;">
 </div>
 
 ----
