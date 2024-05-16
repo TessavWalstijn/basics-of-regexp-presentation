@@ -78,7 +78,7 @@ So lets focus on JavaScript RegEx
   - d = generate indices for substring matches
 - The hard part of RegExp
   - `[ ]` or `( )`
-  - Utilizing groups in code
+  - Utilizing (named) groups in code
   
 ```JavaScript
 const raw = /pattern/flags
@@ -446,7 +446,7 @@ console.log(`Greedy: [${responseGreedy}] \nLazy: [${responseLazy}]`)
   - d = generate indices for substring matches
 - **The hard part of RegExp**
   - ` [ ] ` or ` ( ) `
-  - Utilizing groups in code
+  - Utilizing (named) groups in code
   
 ```JavaScript
 const raw = /pattern/flags
@@ -881,15 +881,15 @@ console.log(`mkayA: ${mkayA} | mkayB: ${mkayB} \ngrayA: ${grayA}  | grayB: ${gra
 
 #!markdown
 
-#### Utilizing groups in code
+#### Utilizing (named) groups in code
 
 #!javascript
 
 const imageDescription = 'This image has a resolution of 1440x900 pixels.';
 const regexpSize = /(([0-9]+)x([0-9]+)) pixels/;
 const [fullMatch, resMatch, width, height] = imageDescription.match(regexpSize);
-console.log(`Width: ${width} / Height: ${height}. Resolution ${resMatch}. Full match ${fullMatch}`);
-// expected output: "Width: 1440 / Height: 900."
+console.log(`Width: ${width} / Height: ${height}. Resolution: ${resMatch}. Full match: ${fullMatch}`);
+// expected output: "Width: 1440 / Height: 900. Resolution: 1440x900. Full match: 1440x900 pixels"
 
 #!markdown
 

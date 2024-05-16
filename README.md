@@ -18,6 +18,10 @@ When you have done that you're ready to present about Regex!
 Both parts are about 30 minutes to present.  
 However I do not recommend to present both in one session since that can be a lot of information.
 
+The file to present is `RegExp.dib`
+
+> NOTE: for presenting this presentation you will have a live coding exercise to show the power of named group capture
+
 ## LICENSE & Images
 
 The MIT License is directed to the `RegExp.dib` file only!
