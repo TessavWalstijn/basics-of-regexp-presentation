@@ -79,6 +79,7 @@ So lets focus on JavaScript RegEx
 - The hard part of RegExp
   - `[ ]` or `( )`
   - Utilizing (named) groups in code
+  - difference between exec and match
   
 ```JavaScript
 const raw = /pattern/flags
@@ -447,6 +448,7 @@ console.log(`Greedy: [${responseGreedy}] \nLazy: [${responseLazy}]`)
 - **The hard part of RegExp**
   - ` [ ] ` or ` ( ) `
   - Utilizing (named) groups in code
+  - difference between exec and match
   
 ```JavaScript
 const raw = /pattern/flags
@@ -777,8 +779,8 @@ console.log(str.match(regex1))
 console.log(str.match(regex2))
 console.log(str.match(regex3))
 console.log(str.match(regex4))
-console.log(str.match(regex5))
-console.log(str.match(regex6))
+console.log(str.match(regex4))
+console.log(str.match(regex4))
 
 #!markdown
 
@@ -883,13 +885,55 @@ console.log(`mkayA: ${mkayA} | mkayB: ${mkayB} \ngrayA: ${grayA}  | grayB: ${gra
 
 #### Utilizing (named) groups in code
 
+> Comment and uncomment to see the difference with named groups and without
+
 #!javascript
 
-const imageDescription = 'This image has a resolution of 1440x900 pixels.';
-const regexpSize = /(([0-9]+)x([0-9]+)) pixels/;
-const [fullMatch, resMatch, width, height] = imageDescription.match(regexpSize);
-console.log(`Width: ${width} / Height: ${height}. Resolution: ${resMatch}. Full match: ${fullMatch}`);
-// expected output: "Width: 1440 / Height: 900. Resolution: 1440x900. Full match: 1440x900 pixels"
+const imageDescription = 'This image has a resolution of 1440x900 pixels.'
+// const regexpSize = /(([0-9]+)x([0-9]+)) pixels/ // before named groups where a thing 🧠
+const regexpSize = /(?<resolution>(?<width>[0-9]+)x(?<height>[0-9]+)) pixels/ // adding named groups making it readable ✨
+const result = imageDescription.match(regexpSize)
+const [fullMatch, group1, group2, group3] = result
+const { resolution, width, height } = result.groups
+console.log(`Group - Width: ${group2} / Height: ${group3}. Resolution: ${group1}. Full match: ${fullMatch}`)
+// expected output: "Group - Width: 1440 / Height: 900. Resolution: 1440x900. Full match: 1440x900 pixels"
+console.log(`Named - Width: ${width} / Height: ${height}. Resolution: ${resolution}. Full match: ${fullMatch}`)
+// expected output: "Named - Width: 1440 / Height: 900. Resolution: 1440x900. Full match: 1440x900 pixels"
+
+#!markdown
+
+---
+
+#### Difference between exec and match
+
+`string.match(regexp)`  
+does not update the state of the regexp
+
+`regexp.exec(string)`  
+does update the state of the regexp
+
+example modified from [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec)
+
+#!javascript
+
+const regexp = RegExp('foo*', 'g');
+const string = 'table football, foosball';
+let array1;
+let array2;
+
+array1 = string.match(regexp)
+console.log(`Found ${array1[0]}. Next starts at ${regexp.lastIndex}.`);
+// Expected output: "Found foo. Next starts at 0."
+
+while ((array2 = regexp.exec(string)) !== null) {
+  console.log(`Found ${array2[0]}. Next starts at ${regexp.lastIndex}.`);
+  // Expected output: "Found foo. Next starts at 9."
+  // Expected output: "Found foo. Next starts at 19."
+}
+
+array1 = string.match(regexp) // does not care of the regexp state
+console.log(`Found ${array1[0]}. Next starts at ${regexp.lastIndex}.`);
+// Expected output: "Found foo. Next starts at 0."
 
 #!markdown
 
